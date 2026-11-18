@@ -15,6 +15,7 @@
             background: #f0f2f5;
             font-family: Arial, sans-serif;
             perspective: 1000px;
+            overflow: hidden;
         }
 
         h1 {
@@ -27,6 +28,7 @@
             width: 250px;
             height: 250px;
             margin-bottom: 40px;
+            perspective: 1000px;
         }
 
         /* Estructura del cubo */
@@ -50,6 +52,11 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
             border-radius: 15px;
             overflow: hidden;
+            /* Evita que se transparenten las caras traseras de manera extraña */
+            backface-visibility: visible; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .cube__face img {
@@ -58,7 +65,7 @@
             object-fit: cover;
         }
 
-        /* Posicionamiento 3D de cada cara del dado */
+        /* Posicionamiento 3D corregido de cada cara del dado */
         .cube__face--1 { transform: rotateY(0deg) translateZ(125px); }
         .cube__face--2 { transform: rotateY(180deg) translateZ(125px); }
         .cube__face--3 { transform: rotateY(90deg) translateZ(125px); }
@@ -95,7 +102,7 @@
 
     <div class="scene">
         <div class="cube" id="cube">
-            <!-- Reemplaza los enlaces "URL_DE_IMAGEN_X" por los links o archivos de tus imágenes -->
+            <!-- Asegúrate de que los archivos de imagen se llamen exactamente así en tu repositorio -->
             <div class="cube__face cube__face--1"><img src="Cara 1.webp" alt="Cara 1"></div>
             <div class="cube__face cube__face--2"><img src="Cara 2.webp" alt="Cara 2"></div>
             <div class="cube__face cube__face--3"><img src="Cara 3.webp" alt="Cara 3"></div>
@@ -111,26 +118,25 @@
         const cube = document.getElementById('cube');
         const rollButton = document.getElementById('rollButton');
 
-        // Rotaciones base en los ejes X e Y para que cada cara quede perfectamente al frente
+        // Rotaciones base exactas para alinear cada cara al frente
         const rotations = [
-            { x: 0, y: 0 },       // Cara 1: Emociones
-            { x: 0, y: 180 },     // Cara 2: Números
-            { x: 0, y: -90 },     // Cara 3: Naturaleza
-            { x: 0, y: 90 },      // Cara 4: Arte y Creatividad
-            { x: -90, y: 0 },     // Cara 5: Comunicación
-            { x: 90, y: 0 }       // Cara 6: Movimiento
+            { x: 0, y: 0 },       // Cara 1
+            { x: 0, y: -180 },    // Cara 2
+            { x: 0, y: -90 },     // Cara 3
+            { x: 0, y: 90 },      // Cara 4
+            { x: -90, y: 0 },     // Cara 5
+            { x: 90, y: 0 }       // Cara 6
         ];
 
         let currentX = 0;
         let currentY = 0;
 
         function rollDice() {
-            // Elegir una cara aleatoria del 0 al 5
             const randomFace = Math.floor(Math.random() * 6);
             
-            // Añadir giros extras completos (vueltas de rotación en 360 grados) para darle realismo
-            const extraTurnsX = (Math.floor(Math.random() * 3) + 3) * 360;
-            const extraTurnsY = (Math.floor(Math.random() * 3) + 3) * 360;
+            // Incrementamos vueltas completas para que el giro se vea dinámico y aleatorio
+            const extraTurnsX = (Math.floor(Math.random() * 3) + 4) * 360;
+            const extraTurnsY = (Math.floor(Math.random() * 3) + 4) * 360;
 
             currentX = rotations[randomFace].x + extraTurnsX;
             currentY = rotations[randomFace].y + extraTurnsY;
